@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A tiny question with a very enthusiastic answer.">
+<meta name="theme-color" content="#FF3E9D">
+<title>Hang out?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Nunito:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    height: 100%;
+  }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #FF3E9D 0%, #FF7AB8 40%, #FFD23F 100%);
+    font-family: 'Nunito', sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    padding: 20px;
+  }
+
+  .floaty {
+    position: fixed;
+    font-size: 34px;
+    opacity: 0.55;
+    animation: drift ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.08));
+  }
+  @keyframes drift {
+    0%   { transform: translateY(0) rotate(0deg); }
+    50%  { transform: translateY(-30px) rotate(12deg); }
+    100% { transform: translateY(0) rotate(0deg); }
+  }
+
+  .card {
+    background: #FFFDF7;
+    border-radius: 28px;
+    padding: 50px 40px 58px;
+    max-width: 460px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 24px 0 rgba(45, 27, 78, 0.15), 0 24px 50px rgba(45, 27, 78, 0.35);
+    position: relative;
+    z-index: 2;
+    transform: rotate(-1.2deg);
+    transition: transform 0.3s ease;
+    border: 3px solid #2D1B4E;
+  }
+  .card:hover {
+    transform: rotate(0deg);
+  }
+
+  .badge {
+    position: absolute;
+    top: -18px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-4deg);
+    background: #2D1B4E;
+    color: #FFD23F;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 7px 18px;
+    border-radius: 50px;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  .title {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    font-size: 32px;
+    color: #2D1B4E;
+    margin: 14px 0 8px;
+    line-height: 1.2;
+  }
+  .subtitle {
+    font-size: 15.5px;
+    color: #8b7fa3;
+    margin: 0 0 36px;
+    font-weight: 400;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+    position: relative;
+    min-height: 130px;
+  }
+
+  button {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 19px;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 32px;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+  }
+
+  #yesBtn {
+    background: #4ECDC4;
+    color: #073d3a;
+    width: 100%;
+    box-shadow: 0 6px 0 #2f9b93;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  #yesBtn:hover {
+    transform: translateY(2px) scale(1.03);
+    box-shadow: 0 4px 0 #2f9b93;
+    background: #3fd9cd;
+  }
+  #yesBtn:active {
+    transform: translateY(6px);
+    box-shadow: 0 0 0 #2f9b93;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.035); }
+  }
+
+  #noBtn {
+    background: #FFD23F;
+    color: #5c3f00;
+    position: relative;
+    z-index: 5;
+    box-shadow: 0 5px 0 #d9a800;
+  }
+
+  #result {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700;
+    font-size: 21px;
+    color: #2D1B4E;
+    margin-top: 22px;
+    min-height: 30px;
+  }
+
+  .hug-scene {
+    display: none;
+    position: relative;
+    height: 120px;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .hug-scene.active {
+    display: flex;
+  }
+  .char {
+    position: absolute;
+    bottom: 0;
+    width: 46px;
+    transition: none;
+  }
+  .char .head {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #F5C89B;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .char .body {
+    width: 46px;
+    height: 54px;
+    border-radius: 22px 22px 8px 8px;
+    margin-top: -8px;
+    position: relative;
+  }
+  .char .arm {
+    position: absolute;
+    width: 34px;
+    height: 10px;
+    border-radius: 6px;
+    top: 14px;
+    transition: transform 0.5s ease 0.55s;
+  }
+  .char-a .body { background: #4ECDC4; }
+  .char-a .arm { background: #3fb8b0; right: -8px; transform-origin: left center; transform: rotate(20deg); }
+  .char-b .body { background: #FF3E9D; }
+  .char-b .arm { background: #e0357f; left: -8px; transform-origin: right center; transform: rotate(-20deg); }
+
+  .char-a {
+    left: 8%;
+    animation: charFromLeft 0.9s ease-out forwards;
+  }
+  .char-b {
+    right: 8%;
+    animation: charFromRight 0.9s ease-out forwards;
+  }
+  @keyframes charFromLeft {
+    0%   { left: -10%; }
+    100% { left: 34%; }
+  }
+  @keyframes charFromRight {
+    0%   { right: -10%; }
+    100% { right: 34%; }
+  }
+  .hug-scene.hugging .char-a .arm { transform: rotate(55deg); }
+  .hug-scene.hugging .char-b .arm { transform: rotate(-55deg); }
+
+  .yes-burst {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 800;
+    pointer-events: none;
+    z-index: 6;
+    animation: burstOut 1.1s ease-out forwards;
+  }
+  @keyframes burstOut {
+    0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+    100% { transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.1) rotate(var(--rot)); opacity: 0; }
+  }
+
+  .emoji-burst {
+    position: fixed;
+    top: -40px;
+    font-size: 28px;
+    pointer-events: none;
+    animation: fall linear forwards;
+    z-index: 3;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0.9; }
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 40px 24px 46px; width: 100%; }
+    .title { font-size: 25px; }
+    .subtitle { font-size: 14px; margin-bottom: 28px; }
+    button { font-size: 16px; padding: 14px 24px; }
+    .floaty { font-size: 24px; opacity: 0.4; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="badge">important decision 💌</div>
+  <p class="title">wanna hang out with me? 👀</p>
+  <p class="subtitle">pick one (there's really only one good option here)</p>
+
+  <div class="buttons" id="buttonWrap">
+    <button id="yesBtn" type="button" onclick="sayYes()">yeah, let's hang out 🎉</button>
+    <button id="noBtn" type="button">go to birthday party</button>
+  </div>
+
+  <div class="hug-scene" id="hugScene">
+    <span class="person left">🙋‍♂️</span>
+    <span class="person right">🙋‍♀️</span>
+    <span class="hug-emoji" id="hugEmoji">🤗</span>
+  </div>
+
+  <div id="result" aria-live="polite" role="status"></div>
+</div>
+
+<script>
+  const floatEmojis = ['💖','✨','🎈','🥳','💫','😄'];
+  for (let i = 0; i < 10; i++) {
+    const f = document.createElement('div');
+    f.className = 'floaty';
+    f.innerText = floatEmojis[Math.floor(Math.random() * floatEmojis.length)];
+    f.style.left = Math.random() * 92 + 'vw';
+    f.style.top = Math.random() * 90 + 'vh';
+    f.style.animationDuration = (4 + Math.random() * 4) + 's';
+    f.style.animationDelay = (Math.random() * 3) + 's';
+    document.body.appendChild(f);
+  }
+
+  const noBtn = document.getElementById('noBtn');
+  const wrap = document.getElementById('buttonWrap');
+  const messages = [
+    "nice try 😏",
+    "nope, not today",
+    "still no 🙅‍♀️",
+    "keep trying, i dare you",
+    "that button's just for decoration",
+    "you're gonna have to click the other one",
+    "the party can wait",
+    "getting warmer? nope, colder",
+    "this button has trust issues",
+    "it's basically doing cardio at this point"
+  ];
+  let msgIndex = 0;
+
+  function rectsOverlap(a, b, pad) {
+    return !(a.right + pad < b.left ||
+             a.left - pad > b.right ||
+             a.bottom + pad < b.top ||
+             a.top - pad > b.bottom);
+  }
+
+  function moveButton() {
+    const btnRect = noBtn.getBoundingClientRect();
+    const yesRect = document.getElementById('yesBtn').getBoundingClientRect();
+    const margin = 16;
+    const vw = window.visualViewport ? window.visualViewport.width : window.innerWidth;
+    const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+    const maxX = vw - btnRect.width - margin;
+    const maxY = vh - btnRect.height - margin;
+
+    let newX, newY, candidate;
+    let attempts = 0;
+    do {
+      newX = margin + Math.random() * (maxX - margin);
+      newY = margin + Math.random() * (maxY - margin);
+      candidate = {
+        left: newX,
+        right: newX + btnRect.width,
+        top: newY,
+        bottom: newY + btnRect.height
+      };
+      attempts++;
+    } while (rectsOverlap(candidate, yesRect, 24) && attempts < 30);
+
+    noBtn.style.position = 'fixed';
+    noBtn.style.left = newX + 'px';
+    noBtn.style.top = newY + 'px';
+    noBtn.style.margin = '0';
+    noBtn.style.transform = 'rotate(' + (Math.random() * 16 - 8) + 'deg)';
+
+    document.getElementById('result').innerText = messages[msgIndex % messages.length];
+    msgIndex++;
+  }
+
+  noBtn.addEventListener('mouseover', moveButton);
+  noBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    moveButton();
+  });
+  noBtn.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    moveButton();
+  });
+
+  function sayYes() {
+    document.getElementById('buttonWrap').style.display = 'none';
+    document.getElementById('hugScene').classList.add('active');
+    document.getElementById('result').innerText = "yesss 🎉 can't wait!";
+    for (let i = 0; i < 40; i++) {
+      const el = document.createElement('div');
+      el.className = 'emoji-burst';
+      el.style.left = Math.random() * 100 + 'vw';
+      el.style.animationDuration = (2 + Math.random() * 2) + 's';
+      el.style.fontSize = (18 + Math.random() * 20) + 'px';
+      const emojis = ['🎉', '💖', '✨', '🎈', '🥳'];
+      el.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 4000);
+    }
+  }
+</script>
+
+</body>
+</html>
